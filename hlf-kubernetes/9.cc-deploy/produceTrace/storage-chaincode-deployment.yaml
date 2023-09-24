@@ -1,0 +1,30 @@
+---
+#---------------- Chaincode Deployment ---------------------
+apiVersion: apps/v1 # for versions before 1.8.0 use apps/v1beta1
+kind: Deployment
+metadata:
+  name: chaincode-producetrace-storage
+  labels:
+    app: chaincode-producetrace-storage
+spec:
+  selector:
+    matchLabels:
+      app: chaincode-producetrace-storage
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: chaincode-producetrace-storage
+    spec:
+      containers:
+        - image: mfadhiligitau/producetrace-cc:1.0
+          imagePullPolicy: Always
+          name: chaincode-producetrace-storage
+          env:
+            - name: CHAINCODE_ID
+              value: "produceTrace:b3dcee13d613a055c06a1e7004c439edf5c1e04fe6d104eddecaa394310a5527"
+            - name: CHAINCODE_SERVER_ADDRESS
+              value: "0.0.0.0:7052"
+          ports:
+            - containerPort: 7052

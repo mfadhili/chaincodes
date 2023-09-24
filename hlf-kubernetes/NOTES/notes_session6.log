@@ -1,0 +1,12 @@
+----- CREATING KUBERNETES CONFIGMAP FOR PEERS -----
+PREREQUISITE FOR CORE.YAML. PASS CORE.YAML  AND  CHAINCODE SCRIPTS AS PART OF CONFIGMAP (builder-config.yaml)
+    DATA SECTION
+        DETECT, BUILD RELEASE FILES
+        CORE.YAML - SAME AS EXAMPLE
+            CHANGE, HAS EXTERNAL BUILDER WITH PATH OF EXTERNAL BUILD SCRIPT
+            ENV WHITELIST ?
+
+1. APPLY CONFIGMAP
+
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl apply -f ../6.configmap/ --kubeconfig=config
+configmap/builders-config created

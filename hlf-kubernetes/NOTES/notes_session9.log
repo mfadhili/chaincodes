@@ -1,0 +1,167 @@
+---- EXTERNAL BUILDERS ----
+CHAINCODE AS SERVICE
+CHAINCODE OUTSIDE INDEPENDENT OF THE FABRIC
+NOT ON EVERY PEER WITH LIFECYCLE MANAGED OUTSIDE OF PPER
+NOT EASILY MODIFIED
+EXTERNALLY EXISTING
+
+---- PARTS OF EXTERNAL BUILDER ----
+1. DETECT
+    bin/detect
+    DETERMINE IF THE BUILD-PACK CAN BE USED IN BUILDING AND LAUNCHING THE CHAINCODE
+2. BUILD
+    bin/build
+    TRANSLATES THE CHAINCODE PACKAGE TO AN EXECUTABLE CHAINCODE
+3. RELEASE
+    bin/release
+    PROVIDES CHAINCODE METADATA TO THE PEER
+4. RUN
+    bin/run
+    RUNS THE CHAINCODE
+
+---- STEPS IN RUNNING AN EXTERNAL CHAINCODE SERVER ----
+1. CONFIGURE PEER SERVICE TO HANDLE EXTERNAL BUILDERS
+    ADDING EXTERNALBUILDER ELEMENT AFTER THE CHAINCODE CONFIGURATION BLOCK IN CORE.YAML
+2. PROVIDE THE PEER NODE THE ADDRESS OF THE EXTERNAL CHAINCODE SERVICE
+    THROUGH THE FILE CONNECTION.JSON.
+    IT IS PACKAGED INTO THE EXTERNAL BUILDER
+3. INSTALL THE CHAINCODE PCKG
+4. RUN CHAINCODE EXTERNAL
+5. APPROVE AND COMMIT THE CHAINCODE TO THE CHANNEL
+6. PEERS CAN THEN COMMUNICATE TO THE CHAINCODE SERVICE
+
+
+ONLY AVAILABLE FOR GOLANG CHAINCODE
+
+---- ACTION [{< >}] ----
+RUN FROM NFS SHARED FOLDER
+
+CD TO CHAINCODE/PACKAGING DIR
+     CONNECTION.JSON
+        ADDRESS OF CHAINCODE SERVER
+        ETC
+     NETADATA.JSON
+        PATH
+        EXTERNAL
+        LABEL
+
+     COMMANDS
+        CREATE TAR FILE WITH CONNECTION.JSON -> for org1
+            rm code.tar.gz
+            tar -czf code.tar.gz connection.json
+            tar czf chakulatrust-farmer.tgz code.tar.gz metadata.json
+
+            rm code.tar.gz
+            tar -czf code.tar.gz connection.json
+            tar czf chakulatrust-middleman.tgz code.tar.gz metadata.json
+
+            rm code.tar.gz
+            tar -czf code.tar.gz connection.json
+            tar czf chakulatrust-processor.tgz code.tar.gz metadata.json
+
+            rm code.tar.gz
+            tar -czf code.tar.gz connection.json
+            tar czf chakulatrust-distributor.tgz code.tar.gz metadata.json
+
+            rm code.tar.gz
+            tar -czf code.tar.gz connection.json
+            tar czf chakulatrust-storage.tgz code.tar.gz metadata.json
+
+            rm code.tar.gz
+            tar -czf code.tar.gz connection.json
+            tar czf chakulatrust-regulator.tgz code.tar.gz metadata.json
+
+            rm code.tar.gz
+            tar -czf code.tar.gz connection.json
+            tar czf chakulatrust-retailer.tgz code.tar.gz metadata.json
+
+
+        CREATE TAR FILE FOR ORG2
+            EDIT WITH VIM:  org1 => org2
+
+     COMMANDS ON PEER CLIS
+        CD PACKAGING cd /opt/gopath/src/github.com/chaincode/chakulatrust/packaging/
+        peer lifecycle chaincode install basic-org2.tgz
+
+           peer lifecycle chaincode install chakulatrust-farmer.tgz
+            chakulatrust:a375653766fb81aa188b0499000ec59a5a887a0d6efa9b53631d09219d816766
+            peer lifecycle chaincode approveformyorg --channelID mychannel --name chakulatrust --version 1.0 --init-required --package-id chakulatrust:a375653766fb81aa188b0499000ec59a5a887a0d6efa9b53631d09219d816766 --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA
+
+
+           peer lifecycle chaincode install chakulatrust-middleman.tgz
+            chakulatrust:8d4d90e3e364e5a06d1aebd3cd0ae2b4248c4ee197045bfdba51417fdf256a72
+                 peer lifecycle chaincode approveformyorg --channelID mychannel --name chakulatrust --version 1.0 --init-required --package-id chakulatrust:8d4d90e3e364e5a06d1aebd3cd0ae2b4248c4ee197045bfdba51417fdf256a72 --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA
+
+
+           peer lifecycle chaincode install chakulatrust-processor.tgz
+            chakulatrust:85a3fea5a012b1c05c93f8c1a2c874bec55df4c065ddf5890bafaf8c0f79e517
+            peer lifecycle chaincode approveformyorg --channelID mychannel --name chakulatrust --version 1.0 --init-required --package-id  chakulatrust:85a3fea5a012b1c05c93f8c1a2c874bec55df4c065ddf5890bafaf8c0f79e517 --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA
+
+
+           peer lifecycle chaincode install chakulatrust-distributor.tgz
+           chakulatrust:51eac14096ddd38e5b9aae5dba1c07d96340dcd418038dc39305eabfdb7ca78f
+           peer lifecycle chaincode approveformyorg --channelID mychannel --name chakulatrust --version 1.0 --init-required --package-id chakulatrust:51eac14096ddd38e5b9aae5dba1c07d96340dcd418038dc39305eabfdb7ca78f --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA
+
+
+           peer lifecycle chaincode install chakulatrust-storage.tgz
+            chakulatrust:8cee4845f9d0e0de7ccd55f7d14100572401b3d81145e621a3c765469d8d70a5
+            peer lifecycle chaincode approveformyorg --channelID mychannel --name chakulatrust --version 1.0 --init-required --package-id chakulatrust:8cee4845f9d0e0de7ccd55f7d14100572401b3d81145e621a3c765469d8d70a5 --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA
+
+
+           peer lifecycle chaincode install chakulatrust-regulator.tgz
+           chakulatrust:24d7902a706c59f3f0754df151fd060096ef1f932baf1fe4bd9456b95114d265
+           peer lifecycle chaincode approveformyorg --channelID mychannel --name chakulatrust --version 1.0 --init-required --package-id chakulatrust:24d7902a706c59f3f0754df151fd060096ef1f932baf1fe4bd9456b95114d265 --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA
+
+
+           peer lifecycle chaincode install chakulatrust-retailer.tgz
+           chakulatrust:a4c27fc722dd4d1a6841d931e000596ac11d06fa24e35692518140fffa20af81
+           peer lifecycle chaincode approveformyorg --channelID mychannel --name chakulatrust --version 1.0 --init-required --package-id chakulatrust:a4c27fc722dd4d1a6841d931e000596ac11d06fa24e35692518140fffa20af81 --sequence 1 -o orderer:7050 --tls --cafile $ORDERER_CA
+
+
+
+        PICK IDENTIFIERS
+
+     CREATE REPO ON DOCKER HUB
+     EXTRA FEATURES
+        PASS SERVER CONFIGURATION
+        SERVER CHAINCODE SERVER
+
+     DOCKER LOGIN mfadhiligitau/@Jesusistheway1998
+        docker login
+        docker build -t mfadhiligitau/chakulatrust:1.0 ./
+
+            docker.io/mfadhiligitau/producetrace-cc:1.0
+
+        docker push mfadhiligitau/producetrace-cc:tagname
+        docker push mfadhiligitau/producetrace-cc:1.0
+
+        docker push mfadhiligitau/chakulatrust:1.0
+
+        APPLY CHAINCODE DEPLOYMENTS
+
+     APPROVE CHAINCODE PEER CLIS
+
+    CHECK
+        peer lifecycle chaincode checkcommitreadiness --channelID mychannel --name chakulatrust --version 1.0 --init-required --sequence 1 -o -orderer:7050 --tls --cafile $ORDERER_CA
+
+     COMMIT CHAINCODE
+        peer lifecycle chaincode commit -o orderer:7050 --channelID mychannel --name chakulatrust --version 1.0 --sequence 1 --init-required --tls true --cafile $ORDERER_CA --peerAddresses peer0-farmer:7051 --tlsRootCertFiles /organizations/peerOrganizations/farmer.agrinet.com/peers/peer0.farmer.agrinet.com/tls/ca.crt --peerAddresses peer0-middleman:7051 --tlsRootCertFiles /organizations/peerOrganizations/middleman.agrinet.com/peers/peer0.middleman.agrinet.com/tls/ca.crt --peerAddresses peer0-processor:7051 --tlsRootCertFiles /organizations/peerOrganizations/processor.agrinet.com/peers/peer0.processor.agrinet.com/tls/ca.crt --peerAddresses peer0-storage:7051 --tlsRootCertFiles /organizations/peerOrganizations/storage.agrinet.com/peers/peer0.storage.agrinet.com/tls/ca.crt --peerAddresses peer0-distributor:7051 --tlsRootCertFiles /organizations/peerOrganizations/distributor.agrinet.com/peers/peer0.distributor.agrinet.com/tls/ca.crt --peerAddresses peer0-regulator:7051 --tlsRootCertFiles /organizations/peerOrganizations/regulator.agrinet.com/peers/peer0.regulator.agrinet.com/tls/ca.crt --peerAddresses peer0-retailer:7051 --tlsRootCertFiles /organizations/peerOrganizations/retailer.agrinet.com/peers/peer0.retailer.agrinet.com/tls/ca.crt
+
+     CHECK
+     CHAINCODE INNIT
+        peer chaincode invoke -o orderer:7050 --isInit --tls true --cafile $ORDERER_CA -C mychannel -n chakulatrust --peerAddresses peer0-farmer:7051 --tlsRootCertFiles /organizations/peerOrganizations/farmer.agrinet.com/peers/peer0.farmer.agrinet.com/tls/ca.crt --peerAddresses peer0-middleman:7051 --tlsRootCertFiles /organizations/peerOrganizations/middleman.agrinet.com/peers/peer0.middleman.agrinet.com/tls/ca.crt --peerAddresses peer0-processor:7051 --tlsRootCertFiles /organizations/peerOrganizations/processor.agrinet.com/peers/peer0.processor.agrinet.com/tls/ca.crt --peerAddresses peer0-storage:7051 --tlsRootCertFiles /organizations/peerOrganizations/storage.agrinet.com/peers/peer0.storage.agrinet.com/tls/ca.crt --peerAddresses peer0-distributor:7051 --tlsRootCertFiles /organizations/peerOrganizations/distributor.agrinet.com/peers/peer0.distributor.agrinet.com/tls/ca.crt --peerAddresses peer0-regulator:7051 --tlsRootCertFiles /organizations/peerOrganizations/regulator.agrinet.com/peers/peer0.regulator.agrinet.com/tls/ca.crt --peerAddresses peer0-retailer:7051 --tlsRootCertFiles /organizations/peerOrganizations/retailer.agrinet.com/peers/peer0.retailer.agrinet.com/tls/ca.crt  -c '{"Args":["InitLedger"]}' --waitForEvent
+
+     QUERY CHAINCODE
+        peer chaincode invoke -o orderer:7050 --tls true --cafile $ORDERER_CA -C mychannel -n chakulatrust --peerAddresses peer0-farmer:7051 --tlsRootCertFiles /organizations/peerOrganizations/farmer.agrinet.com/peers/peer0.farmer.agrinet.com/tls/ca.crt --peerAddresses peer0-middleman:7051 --tlsRootCertFiles /organizations/peerOrganizations/middleman.agrinet.com/peers/peer0.middleman.agrinet.com/tls/ca.crt --peerAddresses peer0-processor:7051 --tlsRootCertFiles /organizations/peerOrganizations/processor.agrinet.com/peers/peer0.processor.agrinet.com/tls/ca.crt --peerAddresses peer0-storage:7051 --tlsRootCertFiles /organizations/peerOrganizations/storage.agrinet.com/peers/peer0.storage.agrinet.com/tls/ca.crt --peerAddresses peer0-distributor:7051 --tlsRootCertFiles /organizations/peerOrganizations/distributor.agrinet.com/peers/peer0.distributor.agrinet.com/tls/ca.crt --peerAddresses peer0-regulator:7051 --tlsRootCertFiles /organizations/peerOrganizations/regulator.agrinet.com/peers/peer0.regulator.agrinet.com/tls/ca.crt --peerAddresses peer0-retailer:7051 --tlsRootCertFiles /organizations/peerOrganizations/retailer.agrinet.com/peers/peer0.retailer.agrinet.com/tls/ca.crt -c '{"Args":["CreateProduce","P00019","Obed Farm","8065 Rocky River Lane Adrian, MI 49221","(256) 596-3619","71°39′N 128°52′E","Farmhouse Milk","Mursik","PL5356458","Liters","1000","2023-03-27","","","","","","","",""]}' --waitForEvent
+
+        peer chaincode query -C mychannel -n chakulatrust -c '{"Args":["GetAllProduce"]}'
+     TEST CREATE
+
+
+     ACCESS COUCH DB
+        kubectl port-forward services/peer0-farmer 5984:5984
+
+        ON BROWSER
+        127.0.0.1:5984/_utils/
+
+

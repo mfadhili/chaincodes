@@ -1,0 +1,114 @@
+----GENERATING CERTIFICATES FOR PEERS AND ORDERERS ----
+
+RUNNING THE SCRIPTS FOR GENERATING THE CERTS {org1-certs.sh, org2-certs.sh, org3-certs.sh, orderer-certs.sh}
+
+CREATING CERTIFICATES USING KUBERNETES JOBS USING ONE OR MORE PODS TO EXC THE JOBS AND EXIT SUCCESSFULLY. (job.yaml)
+    KIND=JOB
+    PARALLELISM=1, COMPLETIONS=1, MAX NO OF PODS
+    VOLUMES
+    FABCATOOLS IMMAGE
+    CREATE CERTS IN THE PODS
+    MOUNT CERTS TO ORGANIZATION FOLDER OF NFS SERVER
+        MOUNTPATH => PATH IN POD
+        SUBPATH => PATH IN PVC FROM NFS SERVER
+
+
+1. APPLY JOB MANIFEST
+
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl apply -f ../3.certifcates/ --kubeconfig=config
+job.batch/create-certs created
+
+exec kubectl exec -i -t -n default create-certs-2nggd -c create-certs "--" sh -c "clear; (bash || ash || sh)"
+
+CERTS GENERATED ARE STORED IN THE NFS SERVER
+
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~# ll /mnt/nfs_share/organizations/
+total 20
+drwxrwxrwx 5   1000    1000 4096 Aug 20 07:02 ./
+drwxrwxrwx 8 nobody nogroup 4096 Aug 19 21:48 ../
+drwxrwxrwx 6   1000    1000 4096 Aug 19 21:50 fabric-ca/
+drwxr-xr-x 3 nobody nogroup 4096 Aug 20 07:02 ordererOrganizations/
+drwxr-xr-x 5 nobody nogroup 4096 Aug 20 07:02 peerOrganizations/
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~# ll /mnt/nfs_share/organizations/peerOrganizations/
+total 20
+drwxr-xr-x 5 nobody nogroup 4096 Aug 20 07:02 ./
+drwxrwxrwx 5   1000    1000 4096 Aug 20 07:02 ../
+drwxr-xr-x 7 nobody nogroup 4096 Aug 20 07:02 org1.example.com/
+drwxr-xr-x 7 nobody nogroup 4096 Aug 20 07:02 org2.example.com/
+drwxr-xr-x 7 nobody nogroup 4096 Aug 20 07:02 org3.example.com/
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~#
+
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~# sudo chmod 777 /mnt/nfs_share/ -R
+
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~# ll /mnt/nfs_share/organizations/ordererOrganizations/example.com/orderers/
+total 28
+drwxrwxrwx 7 nobody nogroup 4096 Aug 20 07:02 ./
+drwxrwxrwx 5 nobody nogroup 4096 Aug 20 07:02 ../
+drwxrwxrwx 4 nobody nogroup 4096 Aug 20 07:02 orderer.example.com/
+drwxrwxrwx 4 nobody nogroup 4096 Aug 20 07:02 orderer2.example.com/
+drwxrwxrwx 4 nobody nogroup 4096 Aug 20 07:02 orderer3.example.com/
+drwxrwxrwx 4 nobody nogroup 4096 Aug 20 07:02 orderer4.example.com/
+drwxrwxrwx 4 nobody nogroup 4096 Aug 20 07:02 orderer5.example.com/
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~#
+
+
+
+
+
+
+
+
+------- GENERATING GENESIS BLOCK AND CHANNEL TRANSACTION --------
+
+GENERATING USING JOB
+    NAME=ARTIFACTS
+    FABRICTOOLS
+    USING CERTS TO GNERATE
+    FILES NECCESSARY TO GENERATE GENESIS BLOCK
+    SCRIPTS = createGenesis.sh, createChannel.sh, configtx.yaml
+
+1. APPLY MANIFEST FILE
+
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl apply -f ../4.artifacts/ --kubeconfig=config
+job.batch/artifacts created
+
+2. CONFIRM THE CREATION OF GENESIS BLOCK AND TRANSACTION ARTIFACTS
+
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~# ll /mnt/nfs_share/
+total 40
+drwxrwxrwx 10 nobody nogroup 4096 Aug 20 07:37 ./
+drwxr-xr-x  3 root   root    4096 Aug  7 10:47 ../
+drwxrwxrwx  3   1000    1000 4096 Aug 19 21:05 chaincode/
+drwxrwxrwx  2 nobody nogroup 4096 Aug 20 07:37 channel-artifacts/
+drwxrwxrwx  2   1000    1000 4096 Aug 19 21:05 configtx/
+drwxrwxrwx  2   1000    1000 4096 Aug 19 21:05 connection-profile/
+drwxrwxrwx  6   1000    1000 4096 Aug 19 21:05 fabric-ca/               -> FOR STARTING CA SERVERS
+drwxrwxrwx  5   1000    1000 4096 Aug 20 07:02 organizations/
+drwxrwxrwx  2   1000    1000 4096 Aug 19 21:06 scripts/
+drwxrwxrwx  2 nobody nogroup 4096 Aug 20 07:37 system-genesis-block/
+-rwxrwxrwx  1   1000    1000    0 Aug 19 16:47 test2*
+-rwxrwxrwx  1   1000    1000    0 Aug 19 16:48 test5*
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~# ll /mnt/nfs_share/system-genesis-block/
+total 40
+drwxrwxrwx  2 nobody nogroup  4096 Aug 20 07:37 ./
+drwxrwxrwx 10 nobody nogroup  4096 Aug 20 07:37 ../
+-rw-r-----  1 nobody nogroup 31909 Aug 20 07:37 genesis.block
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~# ll /mnt/nfs_share/c
+chaincode/          channel-artifacts/  configtx/           connection-profile/
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~# ll /mnt/nfs_share/cha
+ls: cannot access '/mnt/nfs_share/cha': No such file or directory
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~# ll /mnt/nfs_share/channel-artifacts/
+total 24
+drwxrwxrwx  2 nobody nogroup 4096 Aug 20 07:37 ./
+drwxrwxrwx 10 nobody nogroup 4096 Aug 20 07:37 ../
+-rw-r-----  1 nobody nogroup  299 Aug 20 07:37 Org1MSPanchors.tx
+-rw-r-----  1 nobody nogroup  299 Aug 20 07:37 Org2MSPanchors.tx
+-rw-r-----  1 nobody nogroup  299 Aug 20 07:37 Org3MSPanchors.tx
+-rw-r-----  1 nobody nogroup 1607 Aug 20 07:37 mychannel.tx
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~#
+
+
+
+
+
+

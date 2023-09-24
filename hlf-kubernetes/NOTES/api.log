@@ -1,0 +1,341 @@
+Server has started at http://localhost:4000
+Loaded the network configuration located at /usr/src/app/connection-profile/connection-farmer.json
+Built a CA Client named ca-farmer
+Built a file system wallet at /usr/src/app/wallet
+wallet Wallet {
+  providerRegistry: IdentityProviderRegistry {
+    providers: Map(1) { [32m'X.509'[39m => [36m[X509Provider][39m }
+  },
+  store: FileSystemWalletStore { storePath: [32m'/usr/src/app/wallet'[39m }
+}
+An identity for the admin user already exists in the wallet
+Failed to register user : Error: Missing required argument "request.enrollmentID"
+::ffff:127.0.0.1 - - [24/Sep/2023:07:40:53 +0000] "POST /cc/register HTTP/1.1" 200 92 "-" "PostmanRuntime/7.33.0"
+Loaded the network configuration located at /usr/src/app/connection-profile/connection-farmer.json
+Built a file system wallet at /usr/src/app/wallet
+{
+  ProdID: [32m'P00001'[39m,
+  FarmName: [32m'MkulimaFarms'[39m,
+  FarmAddress: [32m'8065 Rocky River Lane Adrian, MI 49221'[39m,
+  FarmContact: [32m'(854) 431-8431'[39m,
+  FarmLocation: [32m'22°40′S 50°25′W'[39m,
+  ProduceName: [32m'Fresh Eggs'[39m,
+  ProduceType: [32m'Eggs'[39m,
+  ProduceLotNo: [32m'PL5356453'[39m,
+  ProduceUnits: [32m'dozen'[39m,
+  ProduceQuantity: [32m'35'[39m,
+  HarvestDate: [32m'2023-01-15'[39m,
+  IntermediaryName: [32m''[39m,
+  IntermediaryAddress: [32m''[39m,
+  IntermediaryType: [32m''[39m,
+  IntermediaryLocation: [32m''[39m,
+  Processes: [32m''[39m,
+  ProcessLotNo: [32m''[39m,
+  ProcessDate: [32m''[39m,
+  OtherInfo: [32m''[39m
+}
+[36m<ref *1>[39m NetworkImpl {
+  contracts: Map(0) {},
+  initialized: [33mtrue[39m,
+  commitListeners: Map(0) {},
+  blockListeners: Map(0) {},
+  gateway: Gateway {
+    networks: Map(1) { [32m'mychannel'[39m => [36m[Circular *1][39m },
+    options: {
+      queryHandlerOptions: [36m[Object][39m,
+      eventHandlerOptions: [36m[Object][39m,
+      discovery: [36m[Object][39m,
+      identity: [32m'tom'[39m,
+      wallet: [36m[Wallet][39m
+    },
+    client: Client {
+      type: [32m'Client'[39m,
+      name: [32m'gateway client'[39m,
+      mspid: [1mnull[22m,
+      _tls_mutual: [36m[Object][39m,
+      endorsers: [36m[Map][39m,
+      committers: Map(0) {},
+      channels: [36m[Map][39m,
+      centralizedOptions: [1mnull[22m
+    },
+    identity: { credentials: [36m[Object][39m, mspId: [32m'FarmerMSP'[39m, type: [32m'X.509'[39m },
+    identityContext: IdentityContext {
+      type: [32m'IdentityContext'[39m,
+      client: [36m[Client][39m,
+      user: [36m[User][39m,
+      name: [32m'tom'[39m,
+      mspid: [32m'FarmerMSP'[39m,
+      transactionId: [1mnull[22m,
+      nonce: [1mnull[22m
+    }
+  },
+  channel: Channel {
+    type: [32m'Channel'[39m,
+    name: [32m'mychannel'[39m,
+    client: Client {
+      type: [32m'Client'[39m,
+      name: [32m'gateway client'[39m,
+      mspid: [1mnull[22m,
+      _tls_mutual: [36m[Object][39m,
+      endorsers: [36m[Map][39m,
+      committers: Map(0) {},
+      channels: [36m[Map][39m,
+      centralizedOptions: [1mnull[22m
+    },
+    endorsers: Map(2) {
+      [32m'peer0-farmer:7051'[39m => [36m[Endorser][39m,
+      [32m'peer0-storage:7051'[39m => [36m[Endorser][39m
+    },
+    committers: Map(1) { [32m'orderer:7050'[39m => [36m[Committer][39m },
+    msps: Map(8) {
+      [32m'DistributorMSP'[39m => [36m[Object][39m,
+      [32m'StorageMSP'[39m => [36m[Object][39m,
+      [32m'OrdererMSP'[39m => [36m[Object][39m,
+      [32m'ProcessorMSP'[39m => [36m[Object][39m,
+      [32m'RetailerMSP'[39m => [36m[Object][39m,
+      [32m'RegulatorMSP'[39m => [36m[Object][39m,
+      [32m'FarmerMSP'[39m => [36m[Object][39m,
+      [32m'MiddlemanMSP'[39m => [36m[Object][39m
+    }
+  },
+  eventServiceManager: EventServiceManager {
+    eventServices: Map(0) {},
+    network: [36m[Circular *1][39m,
+    channel: Channel {
+      type: [32m'Channel'[39m,
+      name: [32m'mychannel'[39m,
+      client: [36m[Client][39m,
+      endorsers: [36m[Map][39m,
+      committers: [36m[Map][39m,
+      msps: [36m[Map][39m
+    },
+    mspId: [32m'FarmerMSP'[39m,
+    identityContext: IdentityContext {
+      type: [32m'IdentityContext'[39m,
+      client: [36m[Client][39m,
+      user: [36m[User][39m,
+      name: [32m'tom'[39m,
+      mspid: [32m'FarmerMSP'[39m,
+      transactionId: [1mnull[22m,
+      nonce: [1mnull[22m
+    }
+  },
+  realtimeFilteredBlockEventSource: BlockEventSource {
+    listeners: Set(0) {},
+    state: [32m'ready'[39m,
+    eventServiceManager: EventServiceManager {
+      eventServices: Map(0) {},
+      network: [36m[Circular *1][39m,
+      channel: [36m[Channel][39m,
+      mspId: [32m'FarmerMSP'[39m,
+      identityContext: [36m[IdentityContext][39m
+    },
+    blockQueue: OrderedBlockQueue { queue: Map(0) {}, nextBlockNumber: [90mundefined[39m },
+    asyncNotifier: AsyncNotifier {
+      running: [33mfalse[39m,
+      readCallback: [36m[Function: bound getNextBlock][39m,
+      notifyCallback: [36m[Function: bound notifyListeners] AsyncFunction[39m
+    },
+    blockType: [32m'filtered'[39m
+  },
+  realtimeFullBlockEventSource: BlockEventSource {
+    listeners: Set(0) {},
+    state: [32m'ready'[39m,
+    eventServiceManager: EventServiceManager {
+      eventServices: Map(0) {},
+      network: [36m[Circular *1][39m,
+      channel: [36m[Channel][39m,
+      mspId: [32m'FarmerMSP'[39m,
+      identityContext: [36m[IdentityContext][39m
+    },
+    blockQueue: OrderedBlockQueue { queue: Map(0) {}, nextBlockNumber: [90mundefined[39m },
+    asyncNotifier: AsyncNotifier {
+      running: [33mfalse[39m,
+      readCallback: [36m[Function: bound getNextBlock][39m,
+      notifyCallback: [36m[Function: bound notifyListeners] AsyncFunction[39m
+    },
+    blockType: [32m'full'[39m
+  },
+  realtimePrivateBlockEventSource: BlockEventSource {
+    listeners: Set(0) {},
+    state: [32m'ready'[39m,
+    eventServiceManager: EventServiceManager {
+      eventServices: Map(0) {},
+      network: [36m[Circular *1][39m,
+      channel: [36m[Channel][39m,
+      mspId: [32m'FarmerMSP'[39m,
+      identityContext: [36m[IdentityContext][39m
+    },
+    blockQueue: OrderedBlockQueue { queue: Map(0) {}, nextBlockNumber: [90mundefined[39m },
+    asyncNotifier: AsyncNotifier {
+      running: [33mfalse[39m,
+      readCallback: [36m[Function: bound getNextBlock][39m,
+      notifyCallback: [36m[Function: bound notifyListeners] AsyncFunction[39m
+    },
+    blockType: [32m'private'[39m
+  },
+  discoveryService: DiscoveryService {
+    type: [32m'DiscoveryService'[39m,
+    name: [32m'mychannel'[39m,
+    channel: Channel {
+      type: [32m'Channel'[39m,
+      name: [32m'mychannel'[39m,
+      client: [36m[Client][39m,
+      endorsers: [36m[Map][39m,
+      committers: [36m[Map][39m,
+      msps: [36m[Map][39m
+    },
+    client: Client {
+      type: [32m'Client'[39m,
+      name: [32m'gateway client'[39m,
+      mspid: [1mnull[22m,
+      _tls_mutual: [36m[Object][39m,
+      endorsers: [36m[Map][39m,
+      committers: Map(0) {},
+      channels: [36m[Map][39m,
+      centralizedOptions: [1mnull[22m
+    },
+    refreshAge: [90mundefined[39m,
+    refreshRunning: [33mfalse[39m,
+    discoveryResults: {
+      msps: [36m[Object][39m,
+      orderers: [36m[Object][39m,
+      peers_by_org: [36m[Object][39m,
+      timestamp: [33m1695541290102[39m
+    },
+    asLocalhost: [33mfalse[39m,
+    currentTarget: Discoverer {
+      name: [32m'peer0-farmer'[39m,
+      mspid: [32m'FarmerMSP'[39m,
+      client: [36m[Client][39m,
+      connected: [33mtrue[39m,
+      connectAttempted: [33mtrue[39m,
+      endpoint: [36m[Endpoint][39m,
+      service: [36m[ServiceClientImpl][39m,
+      serviceClass: [36m[Function][39m,
+      type: [32m'Discoverer'[39m,
+      options: [36m[Object][39m
+    },
+    targets: [ [36m[Discoverer][39m ],
+    _action: { init: [33mfalse[39m, request: [36m[Request][39m },
+    _payload: <Buffer 0a cf 07 0a aa 07 0a 09 46 61 72 6d 65 72 4d 53 50 12 9c 07 2d 2d 2d 2d 2d 42 45 47 49 4e 20 43 45 52 54 49 46 49 43 41 54 45 2d 2d 2d 2d 2d 0a 4d 49 ... 958 more bytes>,
+    _signature: <Buffer 30 44 02 20 02 de 91 ef 00 8d 46 a1 73 f7 20 90 98 3f 88 45 ab 27 5b 08 77 a4 2b e3 8d 6e e2 ab 3e 43 1d 58 02 20 04 ae f8 d9 2a 02 06 65 c0 26 2e de ... 20 more bytes>,
+    requestTimeout: [90mundefined[39m
+  },
+  queryHandler: SingleQueryHandler { currentPeerIndex: [33m0[39m, peers: [ [36m[Endorser][39m ] }
+}
+[36m<ref *1>[39m ContractImpl {
+  contractListeners: Map(0) {},
+  network: [36m<ref *2>[39m NetworkImpl {
+    contracts: Map(1) { [32m'chakulatrust:'[39m => [36m[Circular *1][39m },
+    initialized: [33mtrue[39m,
+    commitListeners: Map(0) {},
+    blockListeners: Map(0) {},
+    gateway: Gateway {
+      networks: [36m[Map][39m,
+      options: [36m[Object][39m,
+      client: [36m[Client][39m,
+      identity: [36m[Object][39m,
+      identityContext: [36m[IdentityContext][39m
+    },
+    channel: Channel {
+      type: [32m'Channel'[39m,
+      name: [32m'mychannel'[39m,
+      client: [36m[Client][39m,
+      endorsers: [36m[Map][39m,
+      committers: [36m[Map][39m,
+      msps: [36m[Map][39m
+    },
+    eventServiceManager: EventServiceManager {
+      eventServices: Map(0) {},
+      network: [36m[Circular *2][39m,
+      channel: [36m[Channel][39m,
+      mspId: [32m'FarmerMSP'[39m,
+      identityContext: [36m[IdentityContext][39m
+    },
+    realtimeFilteredBlockEventSource: BlockEventSource {
+      listeners: Set(0) {},
+      state: [32m'ready'[39m,
+      eventServiceManager: [36m[EventServiceManager][39m,
+      blockQueue: [36m[OrderedBlockQueue][39m,
+      asyncNotifier: [36m[AsyncNotifier][39m,
+      blockType: [32m'filtered'[39m
+    },
+    realtimeFullBlockEventSource: BlockEventSource {
+      listeners: Set(0) {},
+      state: [32m'ready'[39m,
+      eventServiceManager: [36m[EventServiceManager][39m,
+      blockQueue: [36m[OrderedBlockQueue][39m,
+      asyncNotifier: [36m[AsyncNotifier][39m,
+      blockType: [32m'full'[39m
+    },
+    realtimePrivateBlockEventSource: BlockEventSource {
+      listeners: Set(0) {},
+      state: [32m'ready'[39m,
+      eventServiceManager: [36m[EventServiceManager][39m,
+      blockQueue: [36m[OrderedBlockQueue][39m,
+      asyncNotifier: [36m[AsyncNotifier][39m,
+      blockType: [32m'private'[39m
+    },
+    discoveryService: DiscoveryService {
+      type: [32m'DiscoveryService'[39m,
+      name: [32m'mychannel'[39m,
+      channel: [36m[Channel][39m,
+      client: [36m[Client][39m,
+      refreshAge: [90mundefined[39m,
+      refreshRunning: [33mfalse[39m,
+      discoveryResults: [36m[Object][39m,
+      asLocalhost: [33mfalse[39m,
+      currentTarget: [36m[Discoverer][39m,
+      targets: [36m[Array][39m,
+      _action: [36m[Object][39m,
+      _payload: <Buffer 0a cf 07 0a aa 07 0a 09 46 61 72 6d 65 72 4d 53 50 12 9c 07 2d 2d 2d 2d 2d 42 45 47 49 4e 20 43 45 52 54 49 46 49 43 41 54 45 2d 2d 2d 2d 2d 0a 4d 49 ... 958 more bytes>,
+      _signature: <Buffer 30 44 02 20 02 de 91 ef 00 8d 46 a1 73 f7 20 90 98 3f 88 45 ab 27 5b 08 77 a4 2b e3 8d 6e e2 ab 3e 43 1d 58 02 20 04 ae f8 d9 2a 02 06 65 c0 26 2e de ... 20 more bytes>,
+      requestTimeout: [90mundefined[39m
+    },
+    queryHandler: SingleQueryHandler { currentPeerIndex: [33m0[39m, peers: [36m[Array][39m }
+  },
+  chaincodeId: [32m'chakulatrust'[39m,
+  gateway: Gateway {
+    networks: Map(1) { [32m'mychannel'[39m => [36m[NetworkImpl][39m },
+    options: {
+      queryHandlerOptions: [36m[Object][39m,
+      eventHandlerOptions: [36m[Object][39m,
+      discovery: [36m[Object][39m,
+      identity: [32m'tom'[39m,
+      wallet: [36m[Wallet][39m
+    },
+    client: Client {
+      type: [32m'Client'[39m,
+      name: [32m'gateway client'[39m,
+      mspid: [1mnull[22m,
+      _tls_mutual: [36m[Object][39m,
+      endorsers: [36m[Map][39m,
+      committers: Map(0) {},
+      channels: [36m[Map][39m,
+      centralizedOptions: [1mnull[22m
+    },
+    identity: { credentials: [36m[Object][39m, mspId: [32m'FarmerMSP'[39m, type: [32m'X.509'[39m },
+    identityContext: IdentityContext {
+      type: [32m'IdentityContext'[39m,
+      client: [36m[Client][39m,
+      user: [36m[User][39m,
+      name: [32m'tom'[39m,
+      mspid: [32m'FarmerMSP'[39m,
+      transactionId: [1mnull[22m,
+      nonce: [1mnull[22m
+    }
+  },
+  namespace: [32m''[39m,
+  discoveryInterests: [ { name: [32m'chakulatrust'[39m } ]
+}
+2023-09-24T07:41:30.201Z - [31merror[39m: [DiscoveryResultsProcessor]: parseDiscoveryResults[chakulatrust] - Channel:mychannel received discovery error:failed constructing descriptor for chaincodes:<name:"chakulatrust" > 
+Error: DiscoveryService: chakulatrust error: failed constructing descriptor for chaincodes:<name:"chakulatrust" > 
+    at DiscoveryResultsProcessor.parseDiscoveryResults [90m(/usr/src/app/[39mnode_modules/[4mfabric-common[24m/lib/DiscoveryResultsProcessor.js:31:11[90m)[39m
+    at async DiscoveryService.send [90m(/usr/src/app/[39mnode_modules/[4mfabric-common[24m/lib/DiscoveryService.js:341:19[90m)[39m
+    at async ContractImpl.newDiscoveryService [90m(/usr/src/app/[39mnode_modules/[4mfabric-network[24m/lib/contract.js:277:9[90m)[39m
+    at async ContractImpl.getDiscoveryHandler [90m(/usr/src/app/[39mnode_modules/[4mfabric-network[24m/lib/contract.js:254:25[90m)[39m
+    at async Transaction.submit [90m(/usr/src/app/[39mnode_modules/[4mfabric-network[24m/lib/transaction.js:233:43[90m)[39m
+    at async exports.createProduce [90m(/usr/src/app/[39mroutes/CC_services/tx.js:54:18[90m)[39m
+    at async [90m/usr/src/app/[39mroutes/mainRouter.js:35:22
+::ffff:127.0.0.1 - - [24/Sep/2023:07:41:30 +0000] "POST /cc/createProduce HTTP/1.1" 500 2 "-" "PostmanRuntime/7.33.0"

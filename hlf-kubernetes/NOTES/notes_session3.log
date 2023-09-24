@@ -1,0 +1,66 @@
+---- PREREQUISITE FOR THE NFS SERVER ----
+
+- ORDERER CA SERVER CONFIG FILES
+    CHANGES TO csr.hosts; ADDED ca-orderer
+- ORG CA SERVER CONFIG FILES
+    CHANGES TO ADD csr.hosts with ca-org[1,2,3]
+
+1. MOVE PREREQUISITE FOLDER TO NFS DIR
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube$ cp -R hlf-kubernetes/prerequsite/* nfs/
+
+2. CHANGE PERMISSIONS FOR SHELL SCRIPTS
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~# sudo chmod +x /mnt/nfs/ -R
+
+
+---- SETTING UP FABRIC CA SERVER ----
+
+MANIFEST FILE FOR CA-ORG1 (ca-org1.yaml)
+    KIND=DEPLOYMENT, NAME=CA-ORG1, IMAGE VER, COMMANDS STARTING CA SERVER WITH PORT, RESOURCES, ENV VARIABLES,
+    VOLUME PERSITENCE VOL CLAIM, MOUNT OUTSIDE AT NFS SERVER TO DIR IN CONTAINER
+
+ 1. MKDIR ORGANIZATION
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube$ mkdir nfs_clientshare/organizations
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube$ cp nfs_clientshare/
+chaincode/          configtx/           connection-profile/ fabric-ca/          organizations/      scripts/            test2               test5
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube$ cp -r nfs_clientshare/fabric-ca/ nfs_clientshare/organizations/
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:/mnt/nfs# cp fabric-ca/ organizations/ -r
+
+
+MANIFEST FILE FOR CA-ORG1 SERVICE (ca-org1-service.yaml)
+    KIND=SERVICE, SELECTOR.APP=DEPLOYMENT'S SPEC.SELECTOR.MATCHLABELS.APP,
+    SERVICE_TYPE=CLUSTERIP SERVICE,
+    PORTS= TCP PROTOCOL, TARGETPORT=PORT INSIDE CONTAINER FOR SERVICE BINDING, PORT=THAT WILL BE EXPOSED BY THE SERVICE
+
+2. APPLY MANIFEST FILES BEGINNING WITH DEPLOYMENT FILE
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl apply -f ../2.ca/ca-org1.yaml --kubeconfig=config
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl apply -f ../2.ca/ca-org1-service.yaml --kubeconfig=config
+
+3. CORRECT 2023-08-19 22:07:00.195 UTC [bccsp_sw] storePrivateKey -> ERRO 001
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~# chmod 777 -R /mnt/nfs/
+
+4. APPLY MANIFEST FILES FOR ORG 2, 3 AND ORDERER CA
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl apply -f ../2.ca/ --kubeconfig=config
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

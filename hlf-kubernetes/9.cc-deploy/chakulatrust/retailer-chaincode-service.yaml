@@ -1,0 +1,14 @@
+--- #---------------- Chaincode Service ---------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: chakulatrust-retailer
+  labels:
+    app: chakulatrust-retailer
+spec:
+  ports:
+    - name: grpc
+      port: 7052
+      targetPort: 7052
+  selector:
+    app: chaincode-chakulatrust-retailer

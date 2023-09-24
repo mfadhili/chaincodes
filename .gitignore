@@ -1,0 +1,3 @@
+# Ignore Node.js runtime files.
+node_modules/
+nfs/

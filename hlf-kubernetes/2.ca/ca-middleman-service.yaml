@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ca-middleman
+  labels:
+    app: ca-middleman
+spec:
+  type: ClusterIP
+  selector:
+    app: ca-middleman
+  ports:
+    - protocol: TCP
+      targetPort: 3054
+      port: 3054

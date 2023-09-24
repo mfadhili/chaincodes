@@ -1,0 +1,133 @@
+------ INSTALL KUBECTL -----
+sudo apt-get update && sudo apt-get install -y apt-transport-https
+
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+
+sudo apt-get install -y kubectl
+
+kubectl version
+
+type _init_completion
+
+echo 'source <(kubectl completion bash)' >>~/.bashrc
+. ~/.bashrc
+
+---- INSTALL KUBE IDE LENS ----
+curl -fsSL https://downloads.k8slens.dev/keys/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/lens-archive-keyring.gpg > /dev/null
+
+echo "deb [arch=amd64 signed-by=/usr/share/keyrings/lens-archive-keyring.gpg] https://downloads.k8slens.dev/apt/debian stable main" | sudo tee /etc/apt/sources.list.d/lens.list > /dev/null
+
+sudo apt update
+sudo apt install lens
+
+lens-desktop
+
+---- CONNECTING TO KUBE CLUSTER ----
+
+doctl kubernetes cluster kubeconfig save da127406-3f4a-40fc-85f0-14f1c483b375
+
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl config get-clusters
+NAME
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl config get-
+get-clusters  (Display clusters defined in the kubeconfig)  get-contexts  (Describe one or many contexts)               get-users     (Display users defined in the kubeconfig)
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl config get-
+get-clusters  (Display clusters defined in the kubeconfig)  get-contexts  (Describe one or many contexts)               get-users     (Display users defined in the kubeconfig)
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl cluster-info --kubeconfig=config
+Kubernetes control plane is running at https://da127406-3f4a-40fc-85f0-14f1c483b375.k8s.ondigitalocean.com
+CoreDNS is running at https://da127406-3f4a-40fc-85f0-14f1c483b375.k8s.ondigitalocean.com/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl config get-clusters
+NAME
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl config get-clusters --kubeconfig=config
+NAME
+do-ams3-k8s-1-27-4-do-0-ams3-1691377054191
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl get nodes --kubeconfig=config
+NAME                   STATUS   ROLES    AGE   VERSION
+pool-epstozno8-yceob   Ready    <none>   16m   v1.27.4
+pool-epstozno8-yceoj   Ready    <none>   17m   v1.27.4
+pool-epstozno8-yceoo   Ready    <none>   16m   v1.27.4
+pool-epstozno8-yceor   Ready    <none>   16m   v1.27.4
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$
+
+---- CREATE NFS SERVER ----
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~# cat setup_nfs.log
+    1  sudo apt udate
+    2  sudo apt update
+    3  sudo apt install nfs-kernel-server
+    4  sudo mkdir -p /mnt/nfs_share
+    5  sudo chown -R nobody:nogroup /mnt/nfs_share/
+    6  sudo chmod 777 /mnt/nfs_share
+    7  cat /etc/exports
+    8  echo "/mnt/nfs_share/ *(rw,sync,no_subtree_check,insecure)" | sudo tee -a /etc/exports
+    9  cat /etc/exports
+   10  sudo exportfs -a
+   11  sudo systemctl restart nfs-kernel-server
+   12  history > setup_nfs.log
+
+ 1  sudo apt udate
+    2  sudo apt update
+    3  sudo apt install nfs-kernel-server
+    4  sudo mkdir -p /mnt/nfs_share
+    5  sudo chown -R nobody:nogroup /mnt/nfs/
+    6  sudo chmod 777 /mnt/nfs
+    7  cat /etc/exports
+    8  echo "/mnt/nfs/ *(rw,sync,no_subtree_check,insecure)" | sudo tee -a /etc/exports
+    9  cat /etc/exports
+   10  sudo exportfs -a
+   11  sudo systemctl restart nfs-kernel-server
+   12  history > setup_nfs.log
+
+
+
+---- MOUNT LOCAL DIR TO NFS SERVER ----
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube$ sudo apt install cifs-utils
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube$ sudo apt install nfs-common
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube$ sudo mount -t nfs -o mountvers=4  137.184.238.146:/mnt/nfs /home/mfadhili/Desktop/Dev/BlockChain/kube_agrinetcom/nfs
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube$ touch ./nfs/test8
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube$
+
+
+---- APPLY NFS TO KUBE AS PV AND PVC ----
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl apply -f ./../1.nfs/pv.yaml --kubeconfig=config
+persistentvolume/mypv created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl apply -f ./../1.nfs/pvc.yaml --kubeconfig=config
+persistentvolumeclaim/mypvc created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl describe pv mypv --kubeconfig=config
+Name:            mypv
+Labels:          <none>
+Annotations:     pv.kubernetes.io/bound-by-controller: yes
+Finalizers:      [kubernetes.io/pv-protection]
+StorageClass:    standard
+Status:          Bound
+Claim:           default/mypvc
+Reclaim Policy:  Retain
+Access Modes:    RWO
+VolumeMode:      Filesystem
+Capacity:        5Gi
+Node Affinity:   <none>
+Message:
+Source:
+    Type:      NFS (an NFS mount that lasts the lifetime of a pod)
+    Server:    137.184.238.146
+    Path:      /mnt/nfs_share/
+    ReadOnly:  false
+Events:        <none>
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl describe pvc mypvc --kubeconfig=config
+Name:          mypvc
+Namespace:     default
+StorageClass:  standard
+Status:        Bound
+Volume:        mypv
+Labels:        <none>
+Annotations:   pv.kubernetes.io/bind-completed: yes
+               pv.kubernetes.io/bound-by-controller: yes
+Finalizers:    [kubernetes.io/pvc-protection]
+Capacity:      5Gi
+Access Modes:  RWO
+VolumeMode:    Filesystem
+Used By:       <none>
+Events:        <none>
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$

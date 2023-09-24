@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ca-regulator
+spec:
+  selector:
+    matchLabels:
+      app: ca-regulator
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ca-regulator
+    spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: mypvc
+      containers:
+        - name: ca-regulator
+          image: hyperledger/fabric-ca:1.4.9
+          imagePullPolicy: "Always"
+          command:
+            [
+              "fabric-ca-server" ,
+              "start", "-b" ,"admin:adminpw","--port","8054", "-d"
+            ]
+          resources:
+            requests:
+              memory: "300Mi"
+              cpu: "250m"
+            limits:
+              memory: "400Mi"
+              cpu: "350m"
+          env:
+           - name: FABRIC_CA_SERVER_CA_NAME
+             value: ca-regulator
+           - name: FABRIC_CA_SERVER_TLS_ENABLED
+             value: "true"
+           - name: FABRIC_CA_SERVER_CSR_CN
+             value: "ca-regulator"
+           - name: FABRIC_CA_SERVER_CSR_HOSTS
+             value: "ca-regulator"
+          volumeMounts:
+            - name: data
+              mountPath: /etc/hyperledger/fabric-ca-server
+              subPath: organizations/fabric-ca/regulator

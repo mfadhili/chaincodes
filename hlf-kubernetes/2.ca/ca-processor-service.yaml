@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ca-processor
+  labels:
+    app: ca-processor
+spec:
+  type: ClusterIP
+  selector:
+    app: ca-processor
+  ports:
+    - protocol: TCP
+      targetPort: 6054
+      port: 6054

@@ -1,0 +1,499 @@
+---- SET UP KUBERNETES CLUSTER ----
+
+1. CREATE NEW PROJECT ON DIGITAL OCEAN
+2. CREATE KUBERNETES
+3. MACHINE TYPE - BASIC NODES, NODES PLAN , 4 NODES, CHECK MONTHLY COST,
+4. CREATE CLUSTER
+5. CONNECT TO YOUR CLUSTER
+
+
+
+
+
+
+---- CONNECTING TO THE KUBERNETES CLUSTER ----
+
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes$ cp config/k8s-1-27-4-do-0-sfo3-1692460045703-kubeconfig.yaml .kube/config
+10.api/        12.explorer/   14.ingress/    2.ca/          4.artifacts/   6.configmap/   8.chaincode/   config/        .idea/         notes_2.log    notes.txt
+11.ui/         13.monitoring/ 1.nfs/         3.certifcates/ 5.orderer/     7.peers/       9.cc-deploy/   .DS_Store      .kube/         notes.log      prerequsite/
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes$ cp config/k8s-1-27-4-do-0-sfo3-1692460045703-kubeconfig.yaml .kube/config
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes$ cd .kube/
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl config get-clusters
+NAME
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl --kubeconfig=config get-clusters
+Error: flags cannot be placed before plugin name: --kubeconfig=config
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl  get-clusters --kubeconfig=config
+error: unknown command "get-clusters" for "kubectl"
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl cluster-info --kubeconfig=config
+Kubernetes control plane is running at https://12d85269-e719-4fda-b866-82c03e120590.k8s.ondigitalocean.com
+CoreDNS is running at https://12d85269-e719-4fda-b866-82c03e120590.k8s.ondigitalocean.com/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl get nodes --kubeconfig=config
+NAME                   STATUS   ROLES    AGE   VERSION
+pool-kiiimcki9-yf696   Ready    <none>   15m   v1.27.4
+pool-kiiimcki9-yf69a   Ready    <none>   15m   v1.27.4
+pool-kiiimcki9-yf69e   Ready    <none>   15m   v1.27.4
+pool-kiiimcki9-yf69t   Ready    <none>   15m   v1.27.4
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl config get-clusters --kubeconfig=config
+NAME
+do-sfo3-k8s-1-27-4-do-0-sfo3-1692460045703
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$
+
+
+
+
+
+
+---- CREATE NFS SERVER ----
+1. ENSURE NFS PORT 2049 IS OPEN
+2. CREATE DROPLET (SERVER - 137.184.238.146)
+
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube$ ssh root@137.184.238.146
+root@137.184.238.146's password: f41c6865faaf2e3a666a4fd30f Jmmfgt44
+Welcome to Ubuntu 22.04.2 LTS (GNU/Linux 5.15.0-67-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Sat Aug 19 16:26:53 UTC 2023
+
+  System load:  0.0               Users logged in:       0
+  Usage of /:   3.9% of 67.66GB   IPv4 address for eth0: 137.184.238.146
+  Memory usage: 18%               IPv4 address for eth0: 10.48.0.6
+  Swap usage:   0%                IPv4 address for eth1: 10.124.0.3
+  Processes:    109
+
+ * Introducing Expanded Security Maintenance for Applications.
+   Receive updates to over 25,000 software packages with your
+   Ubuntu Pro subscription. Free for personal use.
+
+     https://ubuntu.com/pro
+
+Expanded Security Maintenance for Applications is not enabled.
+
+65 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+*** System restart required ***
+Last login: Sun Aug 13 07:09:30 2023 from 41.81.50.99
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~#
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~#
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~#
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~#
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~# sudo apt update
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~# sudo apt install nfs-kernel-server
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~# sudo mkdir -p /mnt/nfs_share
+
+root@ubuntu-s-1vcpu-2gb-70gb-intel-sfo3-01:~# cat setup_nfs.log
+    1  sudo apt udate
+    2  sudo apt update
+    3  sudo apt install nfs-kernel-server
+    4  sudo mkdir -p /mnt/nfs_share
+    5  sudo chown -R nobody:nogroup /mnt/nfs_share/
+    6  sudo chmod 777 /mnt/nfs_share
+    7  cat /etc/exports
+    8  echo "/mnt/nfs_share/ *(rw,sync,no_subtree_check,insecure)" | sudo tee -a /etc/exports
+    9  cat /etc/exports
+   10  sudo exportfs -a
+   11  sudo systemctl restart nfs-kernel-server
+   12  history > setup_nfs.log
+
+
+
+---- MOUNT NFS DRIVE TO LOCAL SYSTEM ----
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube$ sudo apt install cifs-utils
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube$ sudo apt install nfs-common
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube$ sudo mount -t nfs -o mountvers=4  137.184.238.146:/mnt/nfs_share /home/mfadhili/Desktop/Dev/BlockChain/kube/nfs_clientshare
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube$ touch ./nfs_clientshare/test2
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube$
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube$ sudo mount -t nfs -o mountvers=4  137.184.238.146:/mnt/nfs_share /home/mfadhili/Desktop/Dev/BlockChain/kube/nfs_clientshare
+[sudo] password for mfadhili:
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube$ touch ./nfs_clientshare/test2
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube$ touch ./nfs_clientshare/test7
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube$
+
+
+
+
+
+
+---- APPLY NFS TO KUBE AS PV AND PVC ----
+1. CREATE MANISFEST FILE FOR PERSITSENCE VOLUME (pv.yaml), 5Gi CAPACITY WITH NFS PATH MOUNT AND IP
+2. CREATE MANISFESTFOR PERSITSENCE VOLUME CLAIM (pvc.yaml), 405Mi
+
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl apply -f ./../1.nfs/pv.yaml --kubeconfig=config
+persistentvolume/mypv created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl apply -f ./../1.nfs/pvc.yaml --kubeconfig=config
+persistentvolumeclaim/mypvc created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl describe pv mypv --kubeconfig=config
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl describe pvc mypvc --kubeconfig=config
+
+4. CREATE NGINX SERVER POD, WITH SAME AS CREATED PVC. MOUNT IT AS myvolume, NGINX Image
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl apply -f ./../1.nfs/pod.yaml --kubeconfig=config
+
+5. SSH TO POD USING LENS
+
+ exec kubectl exec -i -t -n default task-pv-pod -c task-pv-container -- sh -c "clear; (bash || ash || sh)"
+
+root@task-pv-pod:/# cd /usr/share/nginx/html/
+root@task-pv-pod:/usr/share/nginx/html# ls
+test2  test3  test5
+
+root@task-pv-pod:/usr/share/nginx/html# rm test3
+root@task-pv-pod:/usr/share/nginx/html#
+
+
+
+
+
+---- RUN SAMPLE APP ON KUBERNETES ----
+LINK FOR RUNNING A STATELESS APPLICATION USING A DEPLOYMENT -
+https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/
+
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl apply -f https://k8s.io/examples/application/deployment.yaml --kubeconfig=config
+deployment.apps/nginx-deployment created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$
+
+2. CONFIRM POD ON LENS IDE
+
+3. DESCRIBE INFO ABOUT THE DEPLOYMENT
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl describe deployment nginx-deployment --kubeconfig=config
+
+4. LIST PODS CREATED
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl get pods -l app=nginx --kubeconfig=config
+
+5. DISPLAY INFO ABOUT A POD
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl describe pod nginx-deployment-cbdccf466-fvh7d  --kubeconfig=config
+
+6. UPDATE DEPLOYMENT - CHANGE IMAGE VERSION BY APPLYING NEW YAML FILE
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl apply -f https://k8s.io/examples/application/deployment-update.yaml --kubeconfig=config
+deployment.apps/nginx-deployment configured
+
+7. CONFIRM NEW PODS
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl get pods -l app=nginx --kubeconfig=config
+
+8. SCALING THE APPLICATION - CHANGES IN THE MANISFEST YAML 4 REPLICAS
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl apply -f https://k8s.io/examples/application/deployment-scale.yaml --kubeconfig=config
+
+9. VERIFY DEPLOYMENT HAS 4 PODS
+
+10. DELETE DEPLOYMENT
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl delete deployment nginx-deployment --kubeconfig=config
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,138 @@
+---- CREATE DEPLOYMENT FOR PEERS ----
+DEPLOYMENT
+NAME SPECIFIC
+REPLICAS SELECTOR SAME AS NAME
+TMPLATE
+    2 CONTAINERS - PEER, COUCH DB
+    MSPDIR FILE
+    TLS CERT MSPDIR
+    VOLUME MOUNTS
+        CHAINCODE
+        CERTS
+        STATE FOLDER FOR PERSITENCE
+        CORE.YAML AT FABIRIC
+        SCRIPTS FOR DECTOR AND RELEASE
+CHANGE CERTS DIRS
+
+---- CREATE SERVICE ----
+2 SERVICES
+    PEER SERVICE
+    METRIC SERVICE
+
+---- CLI DEPLOYMENT ----
+DEPLOYMENT
+PATHS FOR TLS CERTS FOR ORDERER
+SERVICE NAME FOR PEER CORE ADDRESS
+
+---- STARTING PEER DEPLOYMENTS SERVICES AND CLI ----
+ APPLY PER ORG
+
+
+---- ALL SHRLL ----
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom$ cd
+hlf-kubernetes/  .idea/           nfs/             nfs_clientshare/
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom$ cd hlf-kubernetes/.kube/
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ cp -R hlf-kubernetes/prerequsite/* nfs/
+cp: cannot stat 'hlf-kubernetes/prerequsite/*': No such file or directory
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../2.ca/ --kubeconfig=config
+service/ca-distributor created
+deployment.apps/ca-distributor created
+service/ca-farmer created
+deployment.apps/ca-farmer created
+service/ca-middleman created
+deployment.apps/ca-middleman created
+service/ca-orderer created
+deployment.apps/ca-orderer created
+service/ca-processor created
+deployment.apps/ca-processor created
+service/ca-regulator created
+deployment.apps/ca-regulator created
+service/ca-retailer created
+deployment.apps/ca-retailer created
+service/ca-storage created
+deployment.apps/ca-storage created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../3.certifcates/ --kubeconfig=config
+job.batch/create-certs created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../3.certifcates/ --kubeconfig=config
+The Job "create-certs" is invalid: spec.template: Invalid value: core.PodTemplateSpec{ObjectMeta:v1.ObjectMeta{Name:"create-certs", GenerateName:"", Namespace:"", SelfLink:"", UID:"", ResourceVersion:"", Generation:0, CreationTimestamp:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), DeletionTimestamp:<nil>, DeletionGracePeriodSeconds:(*int64)(nil), Labels:map[string]string{"batch.kubernetes.io/controller-uid":"92bcfc77-a48a-4ccb-9ccf-95913fc9a62a", "batch.kubernetes.io/job-name":"create-certs", "controller-uid":"92bcfc77-a48a-4ccb-9ccf-95913fc9a62a", "job-name":"create-certs"}, Annotations:map[string]string(nil), OwnerReferences:[]v1.OwnerReference(nil), Finalizers:[]string(nil), ManagedFields:[]v1.ManagedFieldsEntry(nil)}, Spec:core.PodSpec{Volumes:[]core.Volume{core.Volume{Name:"fabricfiles", VolumeSource:core.VolumeSource{HostPath:(*core.HostPathVolumeSource)(nil), EmptyDir:(*core.EmptyDirVolumeSource)(nil), GCEPersistentDisk:(*core.GCEPersistentDiskVolumeSource)(nil), AWSElasticBlockStore:(*core.AWSElasticBlockStoreVolumeSource)(nil), GitRepo:(*core.GitRepoVolumeSource)(nil), Secret:(*core.SecretVolumeSource)(nil), NFS:(*core.NFSVolumeSource)(nil), ISCSI:(*core.ISCSIVolumeSource)(nil), Glusterfs:(*core.GlusterfsVolumeSource)(nil), PersistentVolumeClaim:(*core.PersistentVolumeClaimVolumeSource)(0xc0119156f8), RBD:(*core.RBDVolumeSource)(nil), Quobyte:(*core.QuobyteVolumeSource)(nil), FlexVolume:(*core.FlexVolumeSource)(nil), Cinder:(*core.CinderVolumeSource)(nil), CephFS:(*core.CephFSVolumeSource)(nil), Flocker:(*core.FlockerVolumeSource)(nil), DownwardAPI:(*core.DownwardAPIVolumeSource)(nil), FC:(*core.FCVolumeSource)(nil), AzureFile:(*core.AzureFileVolumeSource)(nil), ConfigMap:(*core.ConfigMapVolumeSource)(nil), VsphereVolume:(*core.VsphereVirtualDiskVolumeSource)(nil), AzureDisk:(*core.AzureDiskVolumeSource)(nil), PhotonPersistentDisk:(*core.PhotonPersistentDiskVolumeSource)(nil), Projected:(*core.ProjectedVolumeSource)(nil), PortworxVolume:(*core.PortworxVolumeSource)(nil), ScaleIO:(*core.ScaleIOVolumeSource)(nil), StorageOS:(*core.StorageOSVolumeSource)(nil), CSI:(*core.CSIVolumeSource)(nil), Ephemeral:(*core.EphemeralVolumeSource)(nil)}}}, InitContainers:[]core.Container(nil), Containers:[]core.Container{core.Container{Name:"create-certs", Image:"hyperledger/fabric-ca-tools:latest", Command:[]string{"/bin/sh", "-c", "./scripts/orderer-certs.sh &&\n./scripts/farmer-certs.sh &&\n./scripts/middleman-certs.sh &&\n./scripts/processor-certs.sh &&\n./scripts/distributor-certs.sh &&\n./scripts/storage-certs.sh &&\n./scripts/regulator-certs.sh &&\n./scripts/retailer-certs.sh\n"}, Args:[]string(nil), WorkingDir:"", Ports:[]core.ContainerPort(nil), EnvFrom:[]core.EnvFromSource(nil), Env:[]core.EnvVar(nil), Resources:core.ResourceRequirements{Limits:core.ResourceList{"cpu":resource.Quantity{i:resource.int64Amount{value:350, scale:-3}, d:resource.infDecAmount{Dec:(*inf.Dec)(nil)}, s:"350m", Format:"DecimalSI"}, "memory":resource.Quantity{i:resource.int64Amount{value:524288000, scale:0}, d:resource.infDecAmount{Dec:(*inf.Dec)(nil)}, s:"500Mi", Format:"BinarySI"}}, Requests:core.ResourceList{"cpu":resource.Quantity{i:resource.int64Amount{value:300, scale:-3}, d:resource.infDecAmount{Dec:(*inf.Dec)(nil)}, s:"300m", Format:"DecimalSI"}, "memory":resource.Quantity{i:resource.int64Amount{value:314572800, scale:0}, d:resource.infDecAmount{Dec:(*inf.Dec)(nil)}, s:"300Mi", Format:"BinarySI"}}, Claims:[]core.ResourceClaim(nil)}, ResizePolicy:[]core.ContainerResizePolicy(nil), VolumeMounts:[]core.VolumeMount{core.VolumeMount{Name:"fabricfiles", ReadOnly:false, MountPath:"/organizations", SubPath:"organizations", MountPropagation:(*core.MountPropagationMode)(nil), SubPathExpr:""}, core.VolumeMount{Name:"fabricfiles", ReadOnly:false, MountPath:"/scripts", SubPath:"scripts", MountPropagation:(*core.MountPropagationMode)(nil), SubPathExpr:""}}, VolumeDevices:[]core.VolumeDevice(nil), LivenessProbe:(*core.Probe)(nil), ReadinessProbe:(*core.Probe)(nil), StartupProbe:(*core.Probe)(nil), Lifecycle:(*core.Lifecycle)(nil), TerminationMessagePath:"/dev/termination-log", TerminationMessagePolicy:"File", ImagePullPolicy:"Always", SecurityContext:(*core.SecurityContext)(nil), Stdin:false, StdinOnce:false, TTY:false}}, EphemeralContainers:[]core.EphemeralContainer(nil), RestartPolicy:"Never", TerminationGracePeriodSeconds:(*int64)(0xc00bf192f8), ActiveDeadlineSeconds:(*int64)(nil), DNSPolicy:"ClusterFirst", NodeSelector:map[string]string(nil), ServiceAccountName:"", AutomountServiceAccountToken:(*bool)(nil), NodeName:"", SecurityContext:(*core.PodSecurityContext)(0xc00ef91b00), ImagePullSecrets:[]core.LocalObjectReference(nil), Hostname:"", Subdomain:"", SetHostnameAsFQDN:(*bool)(nil), Affinity:(*core.Affinity)(nil), SchedulerName:"default-scheduler", Tolerations:[]core.Toleration(nil), HostAliases:[]core.HostAlias(nil), PriorityClassName:"", Priority:(*int32)(nil), PreemptionPolicy:(*core.PreemptionPolicy)(nil), DNSConfig:(*core.PodDNSConfig)(nil), ReadinessGates:[]core.PodReadinessGate(nil), RuntimeClassName:(*string)(nil), Overhead:core.ResourceList(nil), EnableServiceLinks:(*bool)(nil), TopologySpreadConstraints:[]core.TopologySpreadConstraint(nil), OS:(*core.PodOS)(nil), SchedulingGates:[]core.PodSchedulingGate(nil), ResourceClaims:[]core.PodResourceClaim(nil)}}: field is immutable
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../3.certifcates/ --kubeconfig=config
+The Job "create-certs" is invalid: spec.template: Invalid value: core.PodTemplateSpec{ObjectMeta:v1.ObjectMeta{Name:"create-certs", GenerateName:"", Namespace:"", SelfLink:"", UID:"", ResourceVersion:"", Generation:0, CreationTimestamp:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), DeletionTimestamp:<nil>, DeletionGracePeriodSeconds:(*int64)(nil), Labels:map[string]string{"batch.kubernetes.io/controller-uid":"92bcfc77-a48a-4ccb-9ccf-95913fc9a62a", "batch.kubernetes.io/job-name":"create-certs", "controller-uid":"92bcfc77-a48a-4ccb-9ccf-95913fc9a62a", "job-name":"create-certs"}, Annotations:map[string]string(nil), OwnerReferences:[]v1.OwnerReference(nil), Finalizers:[]string(nil), ManagedFields:[]v1.ManagedFieldsEntry(nil)}, Spec:core.PodSpec{Volumes:[]core.Volume{core.Volume{Name:"fabricfiles", VolumeSource:core.VolumeSource{HostPath:(*core.HostPathVolumeSource)(nil), EmptyDir:(*core.EmptyDirVolumeSource)(nil), GCEPersistentDisk:(*core.GCEPersistentDiskVolumeSource)(nil), AWSElasticBlockStore:(*core.AWSElasticBlockStoreVolumeSource)(nil), GitRepo:(*core.GitRepoVolumeSource)(nil), Secret:(*core.SecretVolumeSource)(nil), NFS:(*core.NFSVolumeSource)(nil), ISCSI:(*core.ISCSIVolumeSource)(nil), Glusterfs:(*core.GlusterfsVolumeSource)(nil), PersistentVolumeClaim:(*core.PersistentVolumeClaimVolumeSource)(0xc00b098000), RBD:(*core.RBDVolumeSource)(nil), Quobyte:(*core.QuobyteVolumeSource)(nil), FlexVolume:(*core.FlexVolumeSource)(nil), Cinder:(*core.CinderVolumeSource)(nil), CephFS:(*core.CephFSVolumeSource)(nil), Flocker:(*core.FlockerVolumeSource)(nil), DownwardAPI:(*core.DownwardAPIVolumeSource)(nil), FC:(*core.FCVolumeSource)(nil), AzureFile:(*core.AzureFileVolumeSource)(nil), ConfigMap:(*core.ConfigMapVolumeSource)(nil), VsphereVolume:(*core.VsphereVirtualDiskVolumeSource)(nil), AzureDisk:(*core.AzureDiskVolumeSource)(nil), PhotonPersistentDisk:(*core.PhotonPersistentDiskVolumeSource)(nil), Projected:(*core.ProjectedVolumeSource)(nil), PortworxVolume:(*core.PortworxVolumeSource)(nil), ScaleIO:(*core.ScaleIOVolumeSource)(nil), StorageOS:(*core.StorageOSVolumeSource)(nil), CSI:(*core.CSIVolumeSource)(nil), Ephemeral:(*core.EphemeralVolumeSource)(nil)}}}, InitContainers:[]core.Container(nil), Containers:[]core.Container{core.Container{Name:"create-certs", Image:"hyperledger/fabric-ca-tools:latest", Command:[]string{"/bin/sh", "-c", "./scripts/orderer-certs.sh &&\n./scripts/farmer-certs.sh &&\n./scripts/middleman-certs.sh &&\n./scripts/processor-certs.sh &&\n./scripts/distributor-certs.sh &&\n./scripts/storage-certs.sh &&\n./scripts/regulator-certs.sh &&\n./scripts/retailer-certs.sh\n"}, Args:[]string(nil), WorkingDir:"", Ports:[]core.ContainerPort(nil), EnvFrom:[]core.EnvFromSource(nil), Env:[]core.EnvVar(nil), Resources:core.ResourceRequirements{Limits:core.ResourceList{"cpu":resource.Quantity{i:resource.int64Amount{value:350, scale:-3}, d:resource.infDecAmount{Dec:(*inf.Dec)(nil)}, s:"350m", Format:"DecimalSI"}, "memory":resource.Quantity{i:resource.int64Amount{value:524288000, scale:0}, d:resource.infDecAmount{Dec:(*inf.Dec)(nil)}, s:"500Mi", Format:"BinarySI"}}, Requests:core.ResourceList{"cpu":resource.Quantity{i:resource.int64Amount{value:300, scale:-3}, d:resource.infDecAmount{Dec:(*inf.Dec)(nil)}, s:"300m", Format:"DecimalSI"}, "memory":resource.Quantity{i:resource.int64Amount{value:314572800, scale:0}, d:resource.infDecAmount{Dec:(*inf.Dec)(nil)}, s:"300Mi", Format:"BinarySI"}}, Claims:[]core.ResourceClaim(nil)}, ResizePolicy:[]core.ContainerResizePolicy(nil), VolumeMounts:[]core.VolumeMount{core.VolumeMount{Name:"fabricfiles", ReadOnly:false, MountPath:"/organizations", SubPath:"organizations", MountPropagation:(*core.MountPropagationMode)(nil), SubPathExpr:""}, core.VolumeMount{Name:"fabricfiles", ReadOnly:false, MountPath:"/scripts", SubPath:"scripts", MountPropagation:(*core.MountPropagationMode)(nil), SubPathExpr:""}}, VolumeDevices:[]core.VolumeDevice(nil), LivenessProbe:(*core.Probe)(nil), ReadinessProbe:(*core.Probe)(nil), StartupProbe:(*core.Probe)(nil), Lifecycle:(*core.Lifecycle)(nil), TerminationMessagePath:"/dev/termination-log", TerminationMessagePolicy:"File", ImagePullPolicy:"Always", SecurityContext:(*core.SecurityContext)(nil), Stdin:false, StdinOnce:false, TTY:false}}, EphemeralContainers:[]core.EphemeralContainer(nil), RestartPolicy:"Never", TerminationGracePeriodSeconds:(*int64)(0xc01226ccc8), ActiveDeadlineSeconds:(*int64)(nil), DNSPolicy:"ClusterFirst", NodeSelector:map[string]string(nil), ServiceAccountName:"", AutomountServiceAccountToken:(*bool)(nil), NodeName:"", SecurityContext:(*core.PodSecurityContext)(0xc01090d170), ImagePullSecrets:[]core.LocalObjectReference(nil), Hostname:"", Subdomain:"", SetHostnameAsFQDN:(*bool)(nil), Affinity:(*core.Affinity)(nil), SchedulerName:"default-scheduler", Tolerations:[]core.Toleration(nil), HostAliases:[]core.HostAlias(nil), PriorityClassName:"", Priority:(*int32)(nil), PreemptionPolicy:(*core.PreemptionPolicy)(nil), DNSConfig:(*core.PodDNSConfig)(nil), ReadinessGates:[]core.PodReadinessGate(nil), RuntimeClassName:(*string)(nil), Overhead:core.ResourceList(nil), EnableServiceLinks:(*bool)(nil), TopologySpreadConstraints:[]core.TopologySpreadConstraint(nil), OS:(*core.PodOS)(nil), SchedulingGates:[]core.PodSchedulingGate(nil), ResourceClaims:[]core.PodResourceClaim(nil)}}: field is immutable
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../3.certifcates/job.yaml --kubeconfig=config
+The Job "create-certs" is invalid: spec.template: Invalid value: core.PodTemplateSpec{ObjectMeta:v1.ObjectMeta{Name:"create-certs", GenerateName:"", Namespace:"", SelfLink:"", UID:"", ResourceVersion:"", Generation:0, CreationTimestamp:time.Date(1, time.January, 1, 0, 0, 0, 0, time.UTC), DeletionTimestamp:<nil>, DeletionGracePeriodSeconds:(*int64)(nil), Labels:map[string]string{"batch.kubernetes.io/controller-uid":"92bcfc77-a48a-4ccb-9ccf-95913fc9a62a", "batch.kubernetes.io/job-name":"create-certs", "controller-uid":"92bcfc77-a48a-4ccb-9ccf-95913fc9a62a", "job-name":"create-certs"}, Annotations:map[string]string(nil), OwnerReferences:[]v1.OwnerReference(nil), Finalizers:[]string(nil), ManagedFields:[]v1.ManagedFieldsEntry(nil)}, Spec:core.PodSpec{Volumes:[]core.Volume{core.Volume{Name:"fabricfiles", VolumeSource:core.VolumeSource{HostPath:(*core.HostPathVolumeSource)(nil), EmptyDir:(*core.EmptyDirVolumeSource)(nil), GCEPersistentDisk:(*core.GCEPersistentDiskVolumeSource)(nil), AWSElasticBlockStore:(*core.AWSElasticBlockStoreVolumeSource)(nil), GitRepo:(*core.GitRepoVolumeSource)(nil), Secret:(*core.SecretVolumeSource)(nil), NFS:(*core.NFSVolumeSource)(nil), ISCSI:(*core.ISCSIVolumeSource)(nil), Glusterfs:(*core.GlusterfsVolumeSource)(nil), PersistentVolumeClaim:(*core.PersistentVolumeClaimVolumeSource)(0xc00fc655a8), RBD:(*core.RBDVolumeSource)(nil), Quobyte:(*core.QuobyteVolumeSource)(nil), FlexVolume:(*core.FlexVolumeSource)(nil), Cinder:(*core.CinderVolumeSource)(nil), CephFS:(*core.CephFSVolumeSource)(nil), Flocker:(*core.FlockerVolumeSource)(nil), DownwardAPI:(*core.DownwardAPIVolumeSource)(nil), FC:(*core.FCVolumeSource)(nil), AzureFile:(*core.AzureFileVolumeSource)(nil), ConfigMap:(*core.ConfigMapVolumeSource)(nil), VsphereVolume:(*core.VsphereVirtualDiskVolumeSource)(nil), AzureDisk:(*core.AzureDiskVolumeSource)(nil), PhotonPersistentDisk:(*core.PhotonPersistentDiskVolumeSource)(nil), Projected:(*core.ProjectedVolumeSource)(nil), PortworxVolume:(*core.PortworxVolumeSource)(nil), ScaleIO:(*core.ScaleIOVolumeSource)(nil), StorageOS:(*core.StorageOSVolumeSource)(nil), CSI:(*core.CSIVolumeSource)(nil), Ephemeral:(*core.EphemeralVolumeSource)(nil)}}}, InitContainers:[]core.Container(nil), Containers:[]core.Container{core.Container{Name:"create-certs", Image:"hyperledger/fabric-ca-tools:latest", Command:[]string{"/bin/sh", "-c", "./scripts/orderer-certs.sh &&\n./scripts/farmer-certs.sh &&\n./scripts/middleman-certs.sh &&\n./scripts/processor-certs.sh &&\n./scripts/distributor-certs.sh &&\n./scripts/storage-certs.sh &&\n./scripts/regulator-certs.sh &&\n./scripts/retailer-certs.sh\n"}, Args:[]string(nil), WorkingDir:"", Ports:[]core.ContainerPort(nil), EnvFrom:[]core.EnvFromSource(nil), Env:[]core.EnvVar(nil), Resources:core.ResourceRequirements{Limits:core.ResourceList{"cpu":resource.Quantity{i:resource.int64Amount{value:350, scale:-3}, d:resource.infDecAmount{Dec:(*inf.Dec)(nil)}, s:"350m", Format:"DecimalSI"}, "memory":resource.Quantity{i:resource.int64Amount{value:524288000, scale:0}, d:resource.infDecAmount{Dec:(*inf.Dec)(nil)}, s:"500Mi", Format:"BinarySI"}}, Requests:core.ResourceList{"cpu":resource.Quantity{i:resource.int64Amount{value:300, scale:-3}, d:resource.infDecAmount{Dec:(*inf.Dec)(nil)}, s:"300m", Format:"DecimalSI"}, "memory":resource.Quantity{i:resource.int64Amount{value:314572800, scale:0}, d:resource.infDecAmount{Dec:(*inf.Dec)(nil)}, s:"300Mi", Format:"BinarySI"}}, Claims:[]core.ResourceClaim(nil)}, ResizePolicy:[]core.ContainerResizePolicy(nil), VolumeMounts:[]core.VolumeMount{core.VolumeMount{Name:"fabricfiles", ReadOnly:false, MountPath:"/organizations", SubPath:"organizations", MountPropagation:(*core.MountPropagationMode)(nil), SubPathExpr:""}, core.VolumeMount{Name:"fabricfiles", ReadOnly:false, MountPath:"/scripts", SubPath:"scripts", MountPropagation:(*core.MountPropagationMode)(nil), SubPathExpr:""}}, VolumeDevices:[]core.VolumeDevice(nil), LivenessProbe:(*core.Probe)(nil), ReadinessProbe:(*core.Probe)(nil), StartupProbe:(*core.Probe)(nil), Lifecycle:(*core.Lifecycle)(nil), TerminationMessagePath:"/dev/termination-log", TerminationMessagePolicy:"File", ImagePullPolicy:"Always", SecurityContext:(*core.SecurityContext)(nil), Stdin:false, StdinOnce:false, TTY:false}}, EphemeralContainers:[]core.EphemeralContainer(nil), RestartPolicy:"Never", TerminationGracePeriodSeconds:(*int64)(0xc012a6ee78), ActiveDeadlineSeconds:(*int64)(nil), DNSPolicy:"ClusterFirst", NodeSelector:map[string]string(nil), ServiceAccountName:"", AutomountServiceAccountToken:(*bool)(nil), NodeName:"", SecurityContext:(*core.PodSecurityContext)(0xc0037d94d0), ImagePullSecrets:[]core.LocalObjectReference(nil), Hostname:"", Subdomain:"", SetHostnameAsFQDN:(*bool)(nil), Affinity:(*core.Affinity)(nil), SchedulerName:"default-scheduler", Tolerations:[]core.Toleration(nil), HostAliases:[]core.HostAlias(nil), PriorityClassName:"", Priority:(*int32)(nil), PreemptionPolicy:(*core.PreemptionPolicy)(nil), DNSConfig:(*core.PodDNSConfig)(nil), ReadinessGates:[]core.PodReadinessGate(nil), RuntimeClassName:(*string)(nil), Overhead:core.ResourceList(nil), EnableServiceLinks:(*bool)(nil), TopologySpreadConstraints:[]core.TopologySpreadConstraint(nil), OS:(*core.PodOS)(nil), SchedulingGates:[]core.PodSchedulingGate(nil), ResourceClaims:[]core.PodResourceClaim(nil)}}: field is immutable
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../3.certifcates/job.yaml --kubeconfig=config
+job.batch/create-certs created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../4.artifacts/job.yaml --kubeconfig=config
+job.batch/artifacts created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../3.certifcates/job.yaml --kubeconfig=config
+job.batch/create-certs created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../4.artifacts/job.yaml --kubeconfig=config
+job.batch/artifacts created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../5.orderer/ --kubeconfig=config
+service/orderer created
+deployment.apps/orderer created
+service/orderer2 created
+deployment.apps/orderer2 created
+service/orderer3 created
+deployment.apps/orderer3 created
+service/orderer4 created
+deployment.apps/orderer4 created
+service/orderer5 created
+deployment.apps/orderer5 created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../5.orderer/ --kubeconfig=config
+service/orderer unchanged
+deployment.apps/orderer created
+service/orderer2 unchanged
+deployment.apps/orderer2 created
+service/orderer3 unchanged
+deployment.apps/orderer3 created
+service/orderer4 unchanged
+deployment.apps/orderer4 created
+service/orderer5 unchanged
+deployment.apps/orderer5 created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../6.configmap/builder-config.yaml --kubeconfig=config
+builder-config.yaml
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../6.configmap/builder-config.yaml --kubeconfig=config
+configmap/builders-config created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../7.peers/farmer --kubeconfig=config
+Warning: spec.template.spec.containers[0].env[13].name: duplicate name "FABRIC_LOGGING_SPEC"
+deployment.apps/cli-peer0-farmer created
+service/peer0-farmer created
+service/peer0-farmer-metrics created
+deployment.apps/peer0-farmer created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../7.peers/middleman --kubeconfig=config
+Warning: spec.template.spec.containers[0].env[13].name: duplicate name "FABRIC_LOGGING_SPEC"
+deployment.apps/cli-peer0-middleman created
+service/peer0-middleman created
+service/peer0-middleman-metrics created
+deployment.apps/peer0-middleman created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../7.peers/processor --kubeconfig=config
+Warning: spec.template.spec.containers[0].env[13].name: duplicate name "FABRIC_LOGGING_SPEC"
+deployment.apps/cli-peer0-processor created
+service/peer0-processor created
+service/peer0-processor-metrics created
+deployment.apps/peer0-processor created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../7.peers/storage --kubeconfig=config
+Warning: spec.template.spec.containers[0].env[13].name: duplicate name "FABRIC_LOGGING_SPEC"
+deployment.apps/cli-peer0-storage created
+service/peer0-storage created
+service/peer0-storage-metrics created
+deployment.apps/peer0-storage created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../7.peers/regulator --kubeconfig=config
+Warning: spec.template.spec.containers[0].env[13].name: duplicate name "FABRIC_LOGGING_SPEC"
+deployment.apps/cli-peer0-regulator created
+service/peer0-regulator created
+service/peer0-regulator-metrics created
+deployment.apps/peer0-regulator created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../7.peers/distributor --kubeconfig=config
+Warning: spec.template.spec.containers[0].env[13].name: duplicate name "FABRIC_LOGGING_SPEC"
+deployment.apps/cli-peer0-distributor created
+service/peer0-distributor created
+service/peer0-distributor-metrics created
+deployment.apps/peer0-distributor created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../7.peers/retailer --kubeconfig=config
+Warning: spec.template.spec.containers[0].env[13].name: duplicate name "FABRIC_LOGGING_SPEC"
+deployment.apps/cli-peer0-retailer created
+service/peer0-retailer created
+service/peer0-retailer-metrics created
+deployment.apps/peer0-retailer created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$

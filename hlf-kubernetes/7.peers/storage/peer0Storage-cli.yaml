@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cli-peer0-storage
+spec:
+  selector:
+    matchLabels:
+      name: cli-peer0-storage
+  template:
+    metadata:
+      labels:
+        name: cli-peer0-storage
+    spec:
+      volumes:
+        - name: fabricfiles
+          persistentVolumeClaim:
+            claimName: mypvc
+
+      containers:
+        - name: cli-peer0-storage
+          stdin: true
+          tty: true
+          resources:
+            limits:
+              memory: "300Mi"
+              cpu: "200m"
+            requests:
+              memory: "200Mi"
+              cpu: "90m"
+          image: hyperledger/fabric-tools:2.3
+          workingDir: /
+          env:
+            - name: ORDERER_CA
+              value: /organizations/ordererOrganizations/agrinet.com/orderers/orderer.agrinet.com/msp/tlscacerts/tlsca.agrinet.com-cert.pem
+
+            - name: CORE_PEER_ADDRESS
+              value: peer0-storage:7051
+            - name: CORE_PEER_ID
+              value: cli.peer0.storage.agrinet.com
+            - name: CORE_PEER_LOCALMSPID
+              value: StorageMSP
+            - name: CORE_PEER_MSPCONFIGPATH
+              value: /organizations/peerOrganizations/storage.agrinet.com/users/Admin@storage.agrinet.com/msp
+            - name: CORE_PEER_TLS_CERT_FILE
+              value: /organizations/peerOrganizations/storage.agrinet.com/peers/peer0.storage.agrinet.com/tls/server.crt
+            - name: CORE_PEER_TLS_ENABLED
+              value: "true"
+            - name: CORE_PEER_TLS_KEY_FILE
+              value: /organizations/peerOrganizations/storage.agrinet.com/peers/peer0.storage.agrinet.com/tls/server.key
+            - name: CORE_PEER_TLS_ROOTCERT_FILE
+              value: /organizations/peerOrganizations/storage.agrinet.com/peers/peer0.storage.agrinet.com/tls/ca.crt
+            - name: FABRIC_LOGGING_SPEC
+              value: ERROR
+            - name: GOPATH
+              value: /opt/gopath
+            - name: SYS_CHANNEL
+              value: system-channel
+            - name: CORE_CHAINCODE_BUILDER
+              value: hyperledger/fabric-ccenv:1.4.8
+            - name: FABRIC_LOGGING_SPEC
+              value: DEBUG
+          volumeMounts:
+            - mountPath: /organizations
+              name: fabricfiles
+              subPath: organizations
+            - mountPath: /configtx
+              name: fabricfiles
+              subPath: configtx
+            - mountPath: /channel-artifacts
+              name: fabricfiles
+              subPath: channel-artifacts
+            - mountPath: /scripts
+              name: fabricfiles
+              subPath: scripts
+            - mountPath: /opt/gopath/src/github.com/chaincode
+              name: fabricfiles
+              subPath: chaincode

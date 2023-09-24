@@ -1,0 +1,72 @@
+---- CREATING DEPLOYMENT FOR ORDERERS ----
+
+5 0RDERERS
+
+MANIFEST FILE FOR CONFIGURATION [orderer1-5.yaml]
+    KIND=DEPLOYMENT
+    CONTAINERS, ORDERER 2.3, PULL_POLICY, CERT PATH FOR MSPDIR, GENESIS FILE LOCATION,
+    TLS ENABLR, CA CRT ETC
+    MOUNTING DIRS FROM NFS THRU mypvc
+
+MANIFEST FILE FOR SERVICES FOR ORDERERS [orderer-svc.yaml]
+    API WILL INTERACT WITH SERVICES
+    SELECTOR TO DEPLOYMENT WITH SAME NAME
+    PORTS PROTOCOL, PROTOCOL, CALLED GRPC
+
+2. APPLY ALL MANIFEST FILES
+
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl apply -f ../5.orderer/ --kubeconfig=config
+service/orderer created
+deployment.apps/orderer created
+service/orderer2 created
+deployment.apps/orderer2 created
+service/orderer3 created
+deployment.apps/orderer3 created
+service/orderer4 created
+deployment.apps/orderer4 created
+service/orderer5 created
+deployment.apps/orderer5 created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl get deployments --kubeconfig=config
+NAME         READY   UP-TO-DATE   AVAILABLE   AGE
+ca-orderer   1/1     1            1           14h
+ca-org1      1/1     1            1           15h
+ca-org2      1/1     1            1           14h
+ca-org3      1/1     1            1           14h
+orderer      1/1     1            1           49s
+orderer2     1/1     1            1           48s
+orderer3     1/1     1            1           46s
+orderer4     1/1     1            1           45s
+orderer5     1/1     1            1           44s
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$
+
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$ kubectl get svc --kubeconfig=config
+NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
+ca-orderer   ClusterIP   10.245.40.232    <none>        10054/TCP           14h
+ca-org1      ClusterIP   10.245.146.233   <none>        7054/TCP            15h
+ca-org2      ClusterIP   10.245.49.166    <none>        8054/TCP            14h
+ca-org3      ClusterIP   10.245.46.153    <none>        9054/TCP            14h
+kubernetes   ClusterIP   10.245.0.1       <none>        443/TCP             21h
+orderer      ClusterIP   10.245.9.102     <none>        7050/TCP,9443/TCP   110s
+orderer2     ClusterIP   10.245.76.134    <none>        7050/TCP            108s
+orderer3     ClusterIP   10.245.68.249    <none>        7050/TCP            107s
+orderer4     ClusterIP   10.245.92.146    <none>        7050/TCP            106s
+orderer5     ClusterIP   10.245.92.5      <none>        7050/TCP            104s
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube/hlf-kubernetes/.kube$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

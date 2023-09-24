@@ -1,0 +1,82 @@
+---- SET UP API USER/SERVER ----
+
+IN SRC FOLDER
+USING NODEJS EXPRESS
+
+CREATE PACKAGE.JSON
+->
+npm init
+UPDATE DEPENDENCIES
+    morgon - FOR LOGGING
+
+CREATE APP.JS
+    PORT 4000
+    REGISTER USER (
+        REGISTER USER OR USER EXISTS
+        REGISTER USER -
+
+            APPUTILS.JS - BUILD CONNECTION PROFILE TO CONNECT TO BCC NETWORK
+                PER ORG
+                BUILD WALLET -RETURNS WALLET PATH
+            BUILDCCP.JS
+                GETCPP() RETURNS WITH CASE
+            CAUTILS.JS
+                BUILDCACLIENT()
+                    RETURNS INSTANCE OF CA CLIENT
+                ENROLLADMIN()
+                    GET ID FROM EALLET
+                    ENRROL FAB CA
+                    REG USER TO WALLET
+                REGISTERANDENROLLUSER()
+                    REGISTER IF USER IN WALLET
+                    REGISTER
+                USEREXIST()
+
+    )
+
+
+----- CREATING CONNECTION PROFILE -----
+
+SCRIPT CCP.SH
+    CREATES THE CONNECTION PROFILE
+    TAKES PEER AND CA CERTS
+    PORTS FOR CA AND PEER P0
+
+CD TO NFS DIR
+    ./scripts/ccp.sh
+
+
+----- OVERRIDING FABRIC CA DEFAULT CONFIGURATION -----
+CONNECTION AND REQUEST TIMEOUT
+
+DEFAULT CONFIGURATION FOR FABRIC-SDK-NODEJS, CHECK ON GITHUB REPO
+    fabric-sdk-node/fabric-ca-client/config/default.json
+
+---- DOCKER -----
+
+CREATE REPO
+    docker build -t mfadhiligitau/apiprodtrace:1.0 .
+    docker push mfadhiligitau/apiprodtrace:1.0
+
+    docker push mfadhiligitau/apiprodtrace:tagname
+
+MKDIR K8S
+    ADD CONFIGMAP
+    APPLY CONFIGURATION
+
+
+---- DEPLOY ----
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../10.api/k8/configmap.yaml --kubeconfig=config
+configmap/ca-client-config created
+mfadhili@mfadhili-HP-ProBook-440-G5:~/Desktop/Dev/BlockChain/kube_agrinetcom/hlf-kubernetes/.kube$ kubectl apply -f ../10.api/k8/api.yaml --kubeconfig=config
+deployment.apps/api created
+service/api created
+
+
+---- FORWARD PORT ----
+
+kubectl port-forward service/api 4000 --kubeconfig=config
+
+
+peer chaincode list --installed
+peer chaincode list --instantiated

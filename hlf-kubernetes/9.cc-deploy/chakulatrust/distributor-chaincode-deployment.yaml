@@ -1,0 +1,30 @@
+---
+#---------------- Chaincode Deployment ---------------------
+apiVersion: apps/v1 # for versions before 1.8.0 use apps/v1beta1
+kind: Deployment
+metadata:
+  name: chaincode-chakulatrust-distributor
+  labels:
+    app: chaincode-chakulatrust-distributor
+spec:
+  selector:
+    matchLabels:
+      app: chaincode-chakulatrust-distributor
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: chaincode-chakulatrust-distributor
+    spec:
+      containers:
+        - image: mfadhiligitau/chakulatrust:1.0
+          imagePullPolicy: Always
+          name: chaincode-chakulatrust-distributor
+          env:
+            - name: CHAINCODE_ID
+              value: "chakulatrust:51eac14096ddd38e5b9aae5dba1c07d96340dcd418038dc39305eabfdb7ca78f"
+            - name: CHAINCODE_SERVER_ADDRESS
+              value: "0.0.0.0:7052"
+          ports:
+            - containerPort: 7052

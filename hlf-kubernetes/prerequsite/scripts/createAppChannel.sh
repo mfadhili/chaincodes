@@ -1,0 +1,1 @@
+peer channel create -o orderer:7050 -c mychannel -f ./channel-artifacts/mychannel.tx --outputBlock ./channel-artifacts/mychannel.block --tls --cafile /organizations/ordererOrganizations/agrinet.com/orderers/orderer.agrinet.com/msp/tlscacerts/tlsca.agrinet.com-cert.pem
